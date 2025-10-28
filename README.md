@@ -9,9 +9,9 @@ This repository contains the Qwen-adapted implementation, tested on the Qwen 2.5
 **Note:** We are releasing the test code first.
 
 ## Model and Data
-- **Model:** [Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b)
-- **Test Data:** [Red-MMU-Data](https://modelscope.cn/datasets/xumanjie/Red-MMU-Data)  
-  Includes `user_embedding`, `item_embedding`, and `user_lastn.json`.
+- **Model:** [Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b) (Apache License Version 2.0)
+- **Test Data:** [Red-MMU-Data](https://modelscope.cn/datasets/xumanjie/Red-MMU-Data)
+  Includes `user_embedding`, `item_embedding`, and `user_lastn.json` (CC BY-NC-ND 4.0).
 
 ## Replicating the Results
 

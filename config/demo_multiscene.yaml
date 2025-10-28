@@ -1,0 +1,120 @@
+data:
+  # using fast kv store for note info and user lastn info if possible
+  train_noteinfo_kv:
+    ip: ''
+    port: ''
+    prefix: ''
+    ex: 1
+
+  engage_lastn_kv:
+    ip: ''
+    port: ''
+    prefix: ''
+    ex: 1
+
+  # Reroots for click and lastn data
+    click_lastn_data_root: YOUR_CLICK_LASTN_DATA_ROOT
+    engage_lastn_data_root: YOUR_ENGAGE_LASTN_DATA_ROOT
+
+  # Note content configuration
+  item_prompt: 'Summary:\n'
+  # for chinese notes: 
+  # item_prompt: '总结:\n'
+  max_text_len: 250              # Maximum text length
+  max_topic_nums: 8              # Maximum number of topics
+  max_input_token_len: 300       # Maximum input token length
+  add_item_hour_embed: false     # Whether to add hour embedding to item
+
+  train_batch_size: 1            # Per-GPU training batch size
+  neg_samples_per_gpu: 400       # Number of negative samples per GPU
+  neg_pool_size_per_gpu: 1000000 # Negative sample pool size per GPU
+
+  # Ratio control for engage/click in lastn sampling for tail training
+  lastn_max_engage_note_num: 0           # Maximum engage notes in lastn
+  lastn_max_click_note_num_homefeed: 96  # Maximum homefeed click notes in lastn
+  lastn_max_click_note_num_ads: 32       # Maximum ads click notes in lastn
+  train_num_workers: 4                   # Number of dataloader workers
+
+model:
+  model_name: REDRec
+  item_pretrain_dir: pre_trained_ckpts/Qwen2.5-1.5B  # Path for item LLM initialization
+  item_llm_init: true
+  user_pretrain_dir: pre_trained_ckpts/Qwen2.5-1.5B  # Path for user LLM initialization
+  user_llm_init: true
+  use_ft_flash_attn: true                   # Use flash attention (speedup)
+  use_lora: false                          # Whether to use LoRA fine-tuning
+  gradient_checkpointing: true             # Enable gradient checkpointing
+
+  # Engage action config
+  engage_action_n: 5                       # Number of engage actions
+  add_item_action_embed: false
+  add_hour_embed: false                    # Add hour embedding
+  add_position_embed: false                # Add position embedding
+  learnable_interest_query: false          # Interest query is learnable
+
+  # AutoEncoder compression configuration
+  AE_compress_dim: -1                      # -1 disables AE compression
+  AE_compress_decay_rate: 0.9995           # AE compression decay rate
+
+  # Action prediction
+  predict_action: false
+
+  # Window NCE loss parameters
+  window_pos: 10
+  query_nums: 3
+
+training:
+  target: ads                               # Training target (e.g., "ads")
+  optim_args:
+    learning_rate: 1.0e-5
+    weight_decay: 0.01
+    lr_mult_prefix: 
+      - 'latent_proj_encoder'
+      - 'latent_proj_decoder'
+    lr_mult_rate: 5.0                       # Learning rate multiplier
+
+  scheduler_args:
+    type: cosine
+    warmup_steps: 5000                      # Learning rate warmup steps
+
+  eval_step: 5000                           # Steps per evaluation
+  clip_grad_norm: 1.0                       # Gradient clipping norm
+  accumulation_steps: 4                     # Gradient accumulation steps
+  freeze_item: false                        # Whether to freeze item encoder
+  total_step: 100000                        # Total training steps
+  strategy: deepspeed                       # Distributed training strategy
+  stage: 3                                  # Deepspeed stage
+  gradient_checkpointing: true
+  load_pretrained_model: false              # Path or flag for loading pretrained model
+
+saver:
+  checkpoint_dir: expr                      # Directory for saving checkpoints
+  log_dir: expr                             # Directory for logs
+  saved_model_name: win10_query3_train_v3_qwen2_1.5b_0608  # Saved model name
+
+eval:
+  # target: "homefeed"
+  target: "ads"
+  model_path: pre_trained_ckpts/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b/
+  note_eval:
+    lastn_note_info_path_homefeed: eval/homefeed_note_contents.json # Info path for homefeed lastn notes
+    lastn_note_info_path_ads: eval/ads_note_contents.json           # Info path for ads lastn notes
+    parquet_note_info_root: eval/ads_note_info_parquet              # Root directory for ads note info parquet
+    basepool_note_info_path_homefeed: eval/homefeed_note_contents.json # Homefeed note info in basepool
+    basepool_note_info_path_ads: eval/ads_note_contents.json           # Ads note info in basepool
+
+  user_eval:
+    user_lastn_path: user_lastn.json
+    max_lastn_len: 72                         # Maximum length of lastn sequence
+    user_eval_batch_size: 16                   # Batch size for user evaluation
+    
+show_progress: true
+precision: bf16-mixed                    # Training precision
+loss: nce                                # Loss type
+nce_thres: 0.98                          # NCE threshold
+
+val_only: false                          # Only validate, no training
+online_compute_embedding: false          # Whether to compute embeddings online
+seed: 1112                              # Random seed
+update_interval: 1                      # How often to update model during training
+reproducibility: false                  # Deterministic behavior for reproducibility

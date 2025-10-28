@@ -1,12 +1,12 @@
-# Cross-Scenario Unified Modeling of User Interests at Billion Scale  
+## Cross-Scenario Unified Modeling of User Interests at Billion Scale  
 
 ![intro](intro.png)
 
 https://arxiv.org/abs/2510.14788
 
-This repository contains the Qwen-adapted implementation, tested on the Qwen 2.5 series. It achieves stable convergence and demonstrates superior performance compared to the Llama version under identical training steps. This is not the official repository.
+This repository contains the Qwen-adapted implementation of RED-Rec, tested on the Qwen 2.5 series. RED-Rec unifies user interest representations by aggregating and synthesizing actions from multiple behavioral contexts, enabling comprehensive item and user modeling. The Qwen-version demonstrates superior performance compared to the Llama version under identical training steps. It achieves 0.8864% increase in total ADVV and 0.3401% boost in overall Cost in Rednote (or Xiaohongshu).
 
-**Note:** We are releasing the test code first.
+**Note:** This is not the official repository. We are releasing the test code first. 
 
 ## Model and Data
 - **Model:** [Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b) (Apache License Version 2.0)

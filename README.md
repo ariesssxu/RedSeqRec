@@ -9,9 +9,39 @@ This repository contains the Qwen-adapted implementation of RED-Rec, tested on t
 **Note:** This is not the official repository. We are releasing the test code first. 
 
 ## Model and Data
-- **Model:** [Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b) (Apache License Version 2.0)
-- **Test Data:** [Red-MMU-Data](https://modelscope.cn/datasets/xumanjie/Red-MMU-Data)
-  Includes `user_embedding`, `item_embedding`, and `user_lastn.json` (CC BY-NC-ND 4.0).
+### **Model:** 
+[Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b) (Apache License Version 2.0)
+### **Data:** 
+[Red-MMU-Data](https://modelscope.cn/datasets/xumanjie/Red-MMU-Data)
+- Training Data: 
+Contains large-scale user–item interaction histories collected from 1.08 million users, including `note_embeddings` and `multiscene_lastn` parquet files for pretraining and fine-tuning multimodal recommendation models. (CC BY-NC-ND 4.0)
+
+#### note_embeddings
+
+| Column              | Type          | Description                                                                                               |
+| ------------------- | ------------- | --------------------------------------------------------------------------------------------------------- |
+| `encrypted_note_id` | `string`      | Hashed unique identifier of a note.                                                                       |
+| `note_idx`          | `int64`       | Numerical index used for cross-referencing.                                                               |
+| `note_feature`      | `list<float>` | Embedding vector (64D) representing the note’s latent semantics or visual-textual features. |
+
+2. multiscene_lastn
+
+| Column              | Type           | Description                                               |
+| ------------------- | -------------- | --------------------------------------------------------- |
+| `encrypted_user_id` | `string`       | Hashed user identifier.                                   |
+| `user_idx`          | `int64`        | Integer index of the user.                                |
+| `homefeed_list`     | `list<struct>` | Sequence of interactions in homefeed context. |
+| `ads_list`          | `list<struct>` | Sequence of interactions with ads.            |
+
+note_idx serves as the join key between note_embeddings and both lists (homefeed_list / ads_list). 
+
+#### Test Data:
+
+Includes user_embedding, item_embedding, and user_lastn.json for evaluation. (CC BY-NC-ND 4.0)
+Includes `user_embedding`, `item_embedding`, and `user_lastn.json` (CC BY-NC-ND 4.0).
+
+Due to company policy, we can only open-source a small portion of the notes from Xiaohongshu; specifically, all notes in the test set (~0.8 million) are publicly available, and you can view each note at https://www.xiaohongshu.com/explore/{note_id}
+, while the remaining notes in the training data are released as their semantic embeddings only.
 
 ## Replicating the Results
 

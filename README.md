@@ -4,19 +4,26 @@
 
 https://arxiv.org/abs/2510.14788
 
-This repository contains the Qwen-adapted implementation of RED-Rec, tested on the Qwen 2.5 series. RED-Rec unifies user interest representations by aggregating and synthesizing actions from multiple behavioral contexts, enabling comprehensive item and user modeling. The Qwen-version demonstrates superior performance compared to the Llama version under identical training steps. It achieves 0.8864% increase in total ADVV and 0.3401% boost in overall Cost in Rednote (or Xiaohongshu).
-
-**Note:** This is not the official repository. We are releasing the test code first. 
+This repository contains the Qwen-adapted implementation, tested on the Qwen 2.5 series. It achieves stable convergence and demonstrates superior performance compared to the Llama version under identical training steps.
 
 ## Model and Data
 ### **Model:** 
-[Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b) (Apache License Version 2.0)
+Modelscope: [Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://modelscope.cn/models/xumanjie/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b)   
+Huggingface: [Red-MMU-Rec-Multiscene-Qwen2.5-1.5b](https://huggingface.co/RedMMURec/Red-Mmu-Rec-Multiscene-Qwen2.5-1.5b)  
+(Apache License Version 2.0)
+
 ### **Data:** 
-[Red-MMU-Data](https://modelscope.cn/datasets/xumanjie/Red-MMU-Data)
+Modelscope: [Red-MMU-Data](https://modelscope.cn/datasets/xumanjie/Red-MMU-Data)  
+Huggingface: [Red-MMU-Data](https://huggingface.co/datasets/RedMMURec/Red-MMU-Data)
 - Training Data: 
 Contains large-scale user–item interaction histories collected from 1.08 million users, including `note_embeddings` and `multiscene_lastn` parquet files for pretraining and fine-tuning multimodal recommendation models. (CC BY-NC-ND 4.0)
 
-#### note_embeddings
+- Test Data: Includes user_embedding, item_embedding, and user_lastn.json for evaluation. (CC BY-NC-ND 4.0)
+Includes `user_embedding`, `item_embedding`, and `user_lastn.json` (CC BY-NC-ND 4.0).
+
+### Training Data: 
+
+1. note_embeddings
 
 | Column              | Type          | Description                                                                                               |
 | ------------------- | ------------- | --------------------------------------------------------------------------------------------------------- |
@@ -38,10 +45,11 @@ note_idx serves as the join key between note_embeddings and both lists (homefeed
 #### Test Data:
 
 Includes user_embedding, item_embedding, and user_lastn.json for evaluation. (CC BY-NC-ND 4.0)
-Includes `user_embedding`, `item_embedding`, and `user_lastn.json` (CC BY-NC-ND 4.0).
+Includes `user_embedding`, `item_embedding`, and `user_lastn.json`.
 
 Due to company policy, we can only open-source a small portion of the notes from Xiaohongshu; specifically, all notes in the test set (~0.8 million) are publicly available, and you can view each note at https://www.xiaohongshu.com/explore/{note_id}
 , while the remaining notes in the training data are released as their semantic embeddings only.
+
 
 ## Replicating the Results
 

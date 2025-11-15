@@ -31,9 +31,16 @@ def worker(config_path, world_size, global_rank, device, tag_name):
 
     model_name = config.model.model_name
     model = get_model(model_name)(config)
-    model = load_state_dict_from_zero_checkpoint(model, config.eval.model_path).bfloat16().eval()
+    if config.eval.model_path.endswith('.bin'):
+        state_dict = torch.load(config.eval.model_path, map_location='cpu')
+        model.load_state_dict(state_dict)
+        model = model.bfloat16().eval()
+    else:
+        if os.path.isdir(config.eval.model_path):
+            model = load_state_dict_from_zero_checkpoint(model, config.eval.model_path).bfloat16().eval()
+        else:
+            raise ValueError(f"Invalid model path: {config.eval.model_path}")    
     print('loading model from:',config.eval.model_path)
-
     model = model.to(device)
 
     # dataset config
